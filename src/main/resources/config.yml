@@ -1,0 +1,5 @@
+auction:
+  default-duration-seconds: 300
+  min-starting-price: 1.0
+  min-bid-increment: 1.0
+  browse-size: 54
