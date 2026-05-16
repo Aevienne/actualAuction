@@ -5,6 +5,10 @@ import me.angelique.actualAuction.config.AuctionSettings;
 import me.angelique.actualAuction.db.DatabaseManager;
 import me.angelique.actualAuction.economy.VaultEconomyHook;
 import me.angelique.actualAuction.model.AuctionEntry;
+import me.angelique.angelNCore.events.AuctionSaleEvent;
+import me.angelique.angelNCore.events.EventBus;
+import me.angelique.angelNCore.services.MarketService;
+import me.angelique.angelNCore.services.ServiceRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -152,6 +156,21 @@ public final class AuctionService {
         Player sellerOnline = seller.getPlayer();
         if (sellerOnline != null) {
             sellerOnline.sendMessage("§aYour item sold to " + entry.getHighestBidderName() + " for $" + formatMoney(amount) + ".");
+        }
+
+        String itemType = entry.getItemStack().getType().name();
+        int qty = entry.getItemStack().getAmount();
+        EventBus.publish(new AuctionSaleEvent(
+                entry.getId().toString(),
+                entry.getSellerName(),
+                entry.getHighestBidderName(),
+                itemType,
+                qty,
+                amount
+        ));
+        MarketService market = ServiceRegistry.getMarketService();
+        if (market != null) {
+            market.recordTransaction(itemType, qty, amount / Math.max(1, qty));
         }
     }
 

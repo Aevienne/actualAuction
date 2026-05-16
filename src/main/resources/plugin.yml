@@ -4,7 +4,7 @@ main: me.angelique.actualAuction.ActualAuction
 api-version: '1.21'
 authors: [Angelique]
 description: Chest GUI auction house with real bidding, Vault, and SQLite persistence.
-softdepend: [Vault]
+softdepend: [Vault, AngelNCore]
 commands:
   auction:
     description: Open the auction house.
